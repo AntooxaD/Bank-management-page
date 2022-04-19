@@ -5,7 +5,7 @@ import Filter from './Components/Filter/Filter';
 import { Title, Text } from './Components/Styled/Styled';
 import { useSelector } from 'react-redux';
 import { getContacts } from './Redux/selectors';
-
+import Calculator from './Components/Calculator/Calculator';
 function App() {
     const contacts = useSelector(getContacts);
     return (
@@ -18,6 +18,7 @@ function App() {
             ) : (
                 <Text>Nothing</Text>
             )}
+            <Calculator />
         </div>
     );
 }
