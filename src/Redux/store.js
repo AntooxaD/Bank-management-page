@@ -10,7 +10,7 @@ import {
     REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import logger from 'redux-logger';
+
 import contactReducer from './contactReducers';
 
 const persistConfig = {
@@ -33,7 +33,7 @@ const store = configureStore({
                     REGISTER,
                 ],
             },
-        }).concat(logger),
+        }),
 
     devTools: process.env.NODE_ENV === 'development',
 });

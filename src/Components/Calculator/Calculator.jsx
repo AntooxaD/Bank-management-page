@@ -6,7 +6,7 @@ function Calculator() {
     // state to storage the values given by the user when filling the input fields
     const [userValues, setUserValues] = useState({
         amount: '',
-        interest: '',
+        interestRate: '',
         years: '',
     });
 
@@ -23,6 +23,7 @@ function Calculator() {
 
     // event handler to update state when the user enters values
     const contacts = useSelector(getContacts);
+    console.log(contacts);
 
     const handleInputChange = event =>
         setUserValues({
@@ -30,33 +31,22 @@ function Calculator() {
             [event.target.name]: event.target.value,
         });
 
-    // Note:
-    // You can optionally write:
-    //   const handleAmountInputChange = (event) =>
-    //     setUserValues({ ...userValues, amount: event.target.value });
-
-    //   const handleInterestInputChange = (event) =>
-    //     setUserValues({ ...userValues, interest: event.target.value });
-
-    //   const handleYearsInputChange = (event) =>
-    //     setUserValues({ ...userValues, years: event.target.value });
-
     // Manage validations and error messages
     const isValid = () => {
-        const { amount, interest, years } = userValues;
+        const { amount, interestRate, years } = userValues;
         let actualError = '';
         // Validate if there are values
-        if (!amount || !interest || !years) {
+        if (!amount || !interestRate || !years) {
             actualError = 'All the values are required';
         }
         // Validade if the values are numbers
-        if (isNaN(amount) || isNaN(interest) || isNaN(years)) {
+        if (isNaN(amount) || isNaN(interestRate) || isNaN(years)) {
             actualError = 'All the values must be a valid number';
         }
         // Validade if the values are positive numbers
         if (
             Number(amount) <= 0 ||
-            Number(interest) <= 0 ||
+            Number(interestRate) <= 0 ||
             Number(years) <= 0
         ) {
             actualError = 'All the values must be a positive number';
@@ -78,9 +68,9 @@ function Calculator() {
     };
 
     // Calculation
-    const calculateResults = ({ amount, interest, years }) => {
+    const calculateResults = ({ amount, interestRate, years }) => {
         const userAmount = Number(amount);
-        const calculatedInterest = Number(interest) / 100 / 12;
+        const calculatedInterest = Number(interestRate) / 100 / 12;
         const calculatedPayments = Number(years) * 12;
         const x = Math.pow(1 + calculatedInterest, calculatedPayments);
         const monthly = (userAmount * x * calculatedInterest) / (x - 1);
@@ -110,7 +100,7 @@ function Calculator() {
     const clearFields = () => {
         setUserValues({
             amount: '',
-            interest: '',
+            interestRate: '',
             years: '',
         });
 
@@ -134,13 +124,13 @@ function Calculator() {
                         //   Form to collect data from the user
                         <div className="form-items">
                             <div>
-                                <lebel>
-                                    <select>
-                                        {contacts.map(contact => (
-                                            <p key={contact.name}></p>
-                                        ))}
-                                    </select>
-                                </lebel>
+                                <select>
+                                    {contacts.map(contact => (
+                                        <option key={contact.id}>
+                                            {contact.name}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
                             <div>
                                 <label id="label">Amount:</label>
@@ -154,11 +144,11 @@ function Calculator() {
                                 />
                             </div>
                             <div>
-                                <label id="label">Interest:</label>
+                                <label id="label">Interest Rate:</label>
                                 <input
                                     type="text"
-                                    name="interest"
-                                    placeholder="Interest"
+                                    name="interestRate"
+                                    placeholder="interest Rate"
                                     value={userValues.interest}
                                     onChange={handleInputChange}
                                 />
@@ -180,8 +170,8 @@ function Calculator() {
                         <div className="form-items">
                             <h4>
                                 Loan amount: ${userValues.amount} <br />{' '}
-                                Interest: {userValues.interest}% <br /> Years to
-                                repay: {userValues.years}
+                                Interest Rate: {userValues.interestRate}% <br />{' '}
+                                Years to repay: {userValues.years}
                             </h4>
                             <div>
                                 <label id="label">Monthly Payment:</label>

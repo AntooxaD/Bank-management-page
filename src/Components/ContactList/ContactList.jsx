@@ -29,8 +29,7 @@ function ContactList() {
                         <TableCell align="center">Interest Rate</TableCell>
                         <TableCell align="center">Maximum Loan</TableCell>
                         <TableCell align="center">
-                            Minimum
-                            <br /> Down Payment
+                            Minimum Down Payment
                         </TableCell>
                         <TableCell align="center">Loan Term</TableCell>
                     </TableRow>

@@ -41,7 +41,7 @@ const InputButton = styled.input`
 const InputFilter = styled.input`
     margin-left: 310px;
 `;
-const Button = styled.button`
+const ButtonAdd = styled.button`
     width: 100px;
     margin: 8px auto;
     border: 0;
@@ -76,7 +76,7 @@ export {
     Wrapper,
     SpanName,
     Input,
-    Button,
+    ButtonAdd,
     TitleFilter,
     InputFilter,
     BtnDelete,

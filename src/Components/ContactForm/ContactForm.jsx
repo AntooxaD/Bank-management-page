@@ -4,7 +4,7 @@ import {
     Wrapper,
     SpanName,
     Input,
-    Button,
+    ButtonAdd,
     InputButton,
 } from '../Styled/Styled';
 import { useDispatch } from 'react-redux';
@@ -121,8 +121,8 @@ function ContactForm() {
                     <Input
                         type="number"
                         name="loanTerm"
-                        min={30}
-                        max={365}
+                        min={1}
+                        max={240}
                         step={1}
                         required
                         value={loanTerm}
@@ -130,7 +130,7 @@ function ContactForm() {
                     />
                 </div>
             </Wrapper>
-            <Button type="submit">Add</Button>
+            <ButtonAdd type="submit">Add</ButtonAdd>
         </Form>
     );
 }
