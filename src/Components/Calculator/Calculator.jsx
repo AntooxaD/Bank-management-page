@@ -85,7 +85,7 @@ export default function Calculator() {
     };
 
     // Calculation
-    const calculateResults = ({ amount, downPayment }) => {
+    const calculateResults = ({ amount }) => {
         const userAmount = Number(amount);
         const calculatedInterest = Number(filter.interestRate) / 100 / 12;
         const calculatedPayments = Number(filter.loanTerm) * 12;
