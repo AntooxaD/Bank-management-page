@@ -1,7 +1,7 @@
 export const getFilter = state => state.contacts.filter;
 export const getItems = state => state.contacts.items;
 
-export const getContacts = state => {
+export const getBanks = state => {
     const filter = getFilter(state);
     const items = getItems(state);
     const normalizedFilter = filter.toLowerCase();

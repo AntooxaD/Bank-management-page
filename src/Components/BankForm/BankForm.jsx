@@ -9,9 +9,10 @@ import {
 } from '../Styled/Styled';
 import { useDispatch } from 'react-redux';
 import { nanoid } from 'nanoid';
-import { addContact } from '../../Redux/contactActions';
+import { addBank } from '../../Redux/contactActions';
 
-function ContactForm() {
+function BankForm() {
+    // state to storage the values given by the user when filling the input fields
     const [name, setName] = useState('');
     const [interestRate, setInterestRate] = useState('');
     const [maximumLoan, setMaximumLoan] = useState('');
@@ -24,7 +25,7 @@ function ContactForm() {
     const handleSubmit = e => {
         e.preventDefault();
         dispatch(
-            addContact({
+            addBank({
                 name,
                 interestRate,
                 maximumLoan,
@@ -43,7 +44,7 @@ function ContactForm() {
         setMinDownPay('');
         setLoanTerm('');
     }
-
+    //Processing submitted data - validating input data and adding to storage
     const handleChange = e => {
         const { name, value } = e.target;
         switch (name) {
@@ -122,7 +123,7 @@ function ContactForm() {
                         type="number"
                         name="loanTerm"
                         min={1}
-                        max={240}
+                        max={20}
                         step={1}
                         required
                         value={loanTerm}
@@ -134,4 +135,4 @@ function ContactForm() {
         </Form>
     );
 }
-export default ContactForm;
+export default BankForm;

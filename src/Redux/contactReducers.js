@@ -1,18 +1,17 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { combineReducers } from '@reduxjs/toolkit';
-import { addContact, deleteContact, filterContact } from './contactActions';
+import { addBank, deleteBank, filterBanks } from './contactActions';
 
 const items = createReducer([], {
-    [addContact]: (state, { payload }) =>
+    [addBank]: (state, { payload }) =>
         state.find(({ name }) => name === payload.name)
             ? alert(`${payload.name} is already in contacts`)
             : [...state, payload],
-    [deleteContact]: (state, { payload }) =>
+    [deleteBank]: (state, { payload }) =>
         state.filter(({ id }) => id !== payload),
-    // [editData]: (state, {payload}) =>
 });
 const filter = createReducer('', {
-    [filterContact]: (_, { payload }) => payload,
+    [filterBanks]: (_, { payload }) => payload,
 });
 
 const contactsReducer = combineReducers({ items, filter });

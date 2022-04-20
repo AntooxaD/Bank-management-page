@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getContacts } from '../../Redux/selectors';
+import { getBanks } from '../../Redux/selectors';
 import {
     Title,
     BoxCalc,
@@ -30,7 +30,7 @@ export default function Calculator() {
 
     const [filter, setFilter] = useState('');
     // event handler to update state when the user enters values
-    const contacts = useSelector(getContacts);
+    const banks = useSelector(getBanks);
 
     const handleInputChange = event =>
         setUserValues({
@@ -40,9 +40,7 @@ export default function Calculator() {
         });
 
     const handlerFilter = e => {
-        const data = contacts.filter(
-            contact => contact.name === e.target.value,
-        );
+        const data = banks.filter(contact => contact.name === e.target.value);
         setFilter(...data);
     };
 
@@ -62,10 +60,11 @@ export default function Calculator() {
         if (Number(amount) <= 0 || Number(downPayment) <= 0) {
             actualError = 'All the values must be a positive number';
         }
+        // Validade if the values are minimum payment
         if (downPayment < filter.minDownPay) {
             actualError = `Sorry, minimum payment ${filter.minDownPay}`;
         }
-
+        // Validade if the values are maximum loan
         if (amount > filter.maximumLoan) {
             actualError = `Sorry, maximum loan ${filter.maximumLoan}`;
         }
@@ -86,7 +85,7 @@ export default function Calculator() {
     };
 
     // Calculation
-    const calculateResults = ({ amount }) => {
+    const calculateResults = ({ amount, downPayment }) => {
         const userAmount = Number(amount);
         const calculatedInterest = Number(filter.interestRate) / 100 / 12;
         const calculatedPayments = Number(filter.loanTerm) * 12;
@@ -97,7 +96,6 @@ export default function Calculator() {
         if (isFinite(monthly)) {
             const monthlyPaymentCalculated = monthly.toFixed(2);
 
-            // Set up results to the state to be displayed to the user
             setResults({
                 monthlyPayment: monthlyPaymentCalculated,
                 isResult: true,
@@ -123,19 +121,17 @@ export default function Calculator() {
         <BoxCalc>
             <div>
                 <Title>Loan Calculator</Title>
-                {/* Display the error when it exists */}
                 <p>{error}</p>
                 <form onSubmit={handleSubmitValues}>
-                    {/* ternary operator manages when the calculator and results will be displayed to the user */}
+                    {/* // ternary operator manages when the calculator and results will be displayed to the user  */}
                     {!results.isResult ? (
-                        //   Form to collect data from the user
                         <div>
                             <div>
                                 <Select onChange={handlerFilter}>
                                     <option>---</option>
-                                    {contacts.map(contact => (
-                                        <option key={contact.id}>
-                                            {contact.name}
+                                    {banks.map(bank => (
+                                        <option key={bank.id}>
+                                            {bank.name}
                                         </option>
                                     ))}
                                 </Select>
@@ -147,7 +143,6 @@ export default function Calculator() {
                                     name="amount"
                                     placeholder="Loan amount"
                                     value={userValues.amount}
-                                    // onChange method sets the values given by the user as input to the userValues state
                                     onChange={handleInputChange}
                                 />
                             </Loan>
@@ -164,7 +159,6 @@ export default function Calculator() {
                             <InputBtn type="submit" />
                         </div>
                     ) : (
-                        //   Form to display the results to the user
                         <div>
                             <h4>
                                 Loan amount: ${userValues.amount} <br />{' '}
@@ -177,7 +171,6 @@ export default function Calculator() {
                                     disabled
                                 />
                             </Loan>
-                            {/* Button to clear fields */}
                             <InputBtn
                                 value="Calculate again"
                                 type="button"

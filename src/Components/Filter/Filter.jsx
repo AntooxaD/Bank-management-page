@@ -1,12 +1,12 @@
 import { TitleFilter, InputFilter } from '../Styled/Styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { filterContact } from '../../Redux/contactActions';
+import { filterBanks } from '../../Redux/contactActions';
 import { getFilter } from '../../Redux/selectors';
 
 function Filter() {
     const dispatch = useDispatch();
     const value = useSelector(getFilter);
-    const onChange = data => dispatch(filterContact(data.currentTarget.value));
+    const onChange = data => dispatch(filterBanks(data.currentTarget.value));
 
     return (
         <label>

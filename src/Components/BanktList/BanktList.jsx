@@ -1,7 +1,7 @@
 import { BtnDelete } from '../Styled/Styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteContact } from '../../Redux/contactActions';
-import { getContacts } from '../../Redux/selectors';
+import { deleteBank } from '../../Redux/contactActions';
+import { getBanks } from '../../Redux/selectors';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -10,11 +10,11 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-function ContactList() {
+function BanktList() {
     const dispatch = useDispatch();
-    const onDelete = id => dispatch(deleteContact(id));
+    const onDelete = id => dispatch(deleteBank(id));
 
-    const contacts = useSelector(getContacts);
+    const banks = useSelector(getBanks);
 
     return (
         <TableContainer component={Paper}>
@@ -35,43 +35,35 @@ function ContactList() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {contacts.map(contact => (
+                    {banks.map(bank => (
                         <TableRow
-                            key={contact.name}
+                            key={bank.name}
                             sx={{
                                 '&:last-child td, &:last-child th': {
                                     border: 0,
                                 },
                             }}
                         >
-                            <TableCell>{contact.name} </TableCell>
+                            <TableCell>{bank.name} </TableCell>
                             <TableCell align="center">
-                                {contact.interestRate}
+                                {bank.interestRate}
                             </TableCell>
                             <TableCell align="center">
-                                {contact.maximumLoan}
+                                {bank.maximumLoan}
                             </TableCell>
                             <TableCell align="center">
-                                {contact.minDownPay}
+                                {bank.minDownPay}
                             </TableCell>
                             <TableCell align="center">
-                                {contact.loanTerm}
+                                {bank.loanTerm}
                             </TableCell>
                             <BtnDelete
                                 type="button"
                                 onClick={() => {
-                                    onDelete(contact.id);
+                                    onDelete(bank.id);
                                 }}
                             >
                                 Delete
-                            </BtnDelete>
-                            <BtnDelete
-                                type="button"
-                                onClick={() => {
-                                    onDelete(contact.id);
-                                }}
-                            >
-                                Edit
                             </BtnDelete>
                         </TableRow>
                     ))}
@@ -81,4 +73,4 @@ function ContactList() {
     );
 }
 
-export default ContactList;
+export default BanktList;
