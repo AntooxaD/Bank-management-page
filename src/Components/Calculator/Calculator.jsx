@@ -8,6 +8,7 @@ function Calculator() {
         amount: '',
         interestRate: '',
         years: '',
+        downPayment: '',
     });
 
     // state to storage the results of the calculation
@@ -23,31 +24,39 @@ function Calculator() {
 
     // event handler to update state when the user enters values
     const contacts = useSelector(getContacts);
-    console.log(contacts);
-
+    console.log('contacts', contacts);
     const handleInputChange = event =>
         setUserValues({
             ...userValues,
+
             [event.target.name]: event.target.value,
         });
 
+    const data = { ...contacts };
+    console.log('data', data);
     // Manage validations and error messages
     const isValid = () => {
-        const { amount, interestRate, years } = userValues;
+        const { amount, interestRate, years, downPayment } = userValues;
         let actualError = '';
         // Validate if there are values
-        if (!amount || !interestRate || !years) {
+        if (!amount || !interestRate || !years || !downPayment) {
             actualError = 'All the values are required';
         }
         // Validade if the values are numbers
-        if (isNaN(amount) || isNaN(interestRate) || isNaN(years)) {
+        if (
+            isNaN(amount) ||
+            isNaN(interestRate) ||
+            isNaN(years) ||
+            isNaN(downPayment)
+        ) {
             actualError = 'All the values must be a valid number';
         }
         // Validade if the values are positive numbers
         if (
             Number(amount) <= 0 ||
             Number(interestRate) <= 0 ||
-            Number(years) <= 0
+            Number(years) <= 0 ||
+            Number(downPayment) <= 0
         ) {
             actualError = 'All the values must be a positive number';
         }
@@ -72,6 +81,7 @@ function Calculator() {
         const userAmount = Number(amount);
         const calculatedInterest = Number(interestRate) / 100 / 12;
         const calculatedPayments = Number(years) * 12;
+
         const x = Math.pow(1 + calculatedInterest, calculatedPayments);
         const monthly = (userAmount * x * calculatedInterest) / (x - 1);
 
@@ -102,6 +112,7 @@ function Calculator() {
             amount: '',
             interestRate: '',
             years: '',
+            downPayment: '',
         });
 
         setResults({
@@ -140,6 +151,16 @@ function Calculator() {
                                     placeholder="Loan amount"
                                     value={userValues.amount}
                                     // onChange method sets the values given by the user as input to the userValues state
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div>
+                                <label id="label">Down payment:</label>
+                                <input
+                                    type="text"
+                                    name="downPayment"
+                                    placeholder="Down payment"
+                                    value={userValues.downPayment}
                                     onChange={handleInputChange}
                                 />
                             </div>
