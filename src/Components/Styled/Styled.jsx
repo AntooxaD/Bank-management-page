@@ -3,12 +3,12 @@ import styled from 'styled-components';
 const Title = styled.h1`
     font-size: 1.8em;
     text-align: center;
-    color: palevioletred;
+    color: #1976d2;
 `;
 const TitleFilter = styled.h3`
     font-size: 1.3em;
     text-align: center;
-    color: palevioletred;
+    color: #1976d2;
 `;
 
 const Form = styled.form`
@@ -21,7 +21,7 @@ const Wrapper = styled.div`
     margin: 5px auto;
     display: flex;
 `;
-
+const FormCalc = styled.div``;
 const SpanName = styled.span`
     margin-left: 20px;
 `;
@@ -49,7 +49,7 @@ const ButtonAdd = styled.button`
     cursor: pointer;
     :hover,
     :focus {
-        background-color: palevioletred;
+        background-color: #1976d2;
         color: #fff;
     }
 `;
@@ -61,15 +61,40 @@ const BtnDelete = styled.button`
     cursor: pointer;
     :hover,
     :focus {
-        background-color: palevioletred;
+        background-color: #1976d2;
         color: #fff;
     }
 `;
 const Text = styled.p`
     text-align: center;
 `;
-
+const Select = styled.select`
+    height: 20px;
+    width: 100px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+`;
+const BoxCalc = styled.div`
+    text-align: center;
+`;
+const InputBtn = styled.input`
+    background-color: #55a9fe;
+    border-radius: 5px;
+`;
+const AmountLabel = styled.label`
+    margin-right: 50px;
+`;
+const Loan = styled.div`
+    margin-bottom: 20px;
+`;
+const LoanInpur = styled.input`
+    margin-left: 30px;
+`;
 export {
+    LoanInpur,
+    Loan,
+    AmountLabel,
+    InputBtn,
     Text,
     Title,
     Form,
@@ -81,4 +106,7 @@ export {
     InputFilter,
     BtnDelete,
     InputButton,
+    FormCalc,
+    Select,
+    BoxCalc,
 };

@@ -1,30 +1,37 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getContacts } from '../../Redux/selectors';
-
-function Calculator() {
+import {
+    Title,
+    BoxCalc,
+    Select,
+    InputBtn,
+    AmountLabel,
+    Loan,
+    LoanInpur,
+} from '../Styled/Styled';
+export default function Calculator() {
     // state to storage the values given by the user when filling the input fields
     const [userValues, setUserValues] = useState({
         amount: '',
         interestRate: '',
-        years: '',
         downPayment: '',
+        maximumLoan: '',
     });
 
     // state to storage the results of the calculation
     const [results, setResults] = useState({
         monthlyPayment: '',
-        totalPayment: '',
-        totalInterest: '',
         isResult: false,
     });
 
     // state to storage error message
     const [error, setError] = useState('');
 
+    const [filter, setFilter] = useState('');
     // event handler to update state when the user enters values
     const contacts = useSelector(getContacts);
-    console.log('contacts', contacts);
+
     const handleInputChange = event =>
         setUserValues({
             ...userValues,
@@ -32,33 +39,35 @@ function Calculator() {
             [event.target.name]: event.target.value,
         });
 
-    const data = { ...contacts };
-    console.log('data', data);
+    const handlerFilter = e => {
+        const data = contacts.filter(
+            contact => contact.name === e.target.value,
+        );
+        setFilter(...data);
+    };
+
     // Manage validations and error messages
     const isValid = () => {
-        const { amount, interestRate, years, downPayment } = userValues;
+        const { amount, downPayment } = userValues;
         let actualError = '';
         // Validate if there are values
-        if (!amount || !interestRate || !years || !downPayment) {
+        if (!amount || !downPayment) {
             actualError = 'All the values are required';
         }
         // Validade if the values are numbers
-        if (
-            isNaN(amount) ||
-            isNaN(interestRate) ||
-            isNaN(years) ||
-            isNaN(downPayment)
-        ) {
+        if (isNaN(amount) || isNaN(downPayment)) {
             actualError = 'All the values must be a valid number';
         }
         // Validade if the values are positive numbers
-        if (
-            Number(amount) <= 0 ||
-            Number(interestRate) <= 0 ||
-            Number(years) <= 0 ||
-            Number(downPayment) <= 0
-        ) {
+        if (Number(amount) <= 0 || Number(downPayment) <= 0) {
             actualError = 'All the values must be a positive number';
+        }
+        if (downPayment < filter.minDownPay) {
+            actualError = `Sorry, minimum payment ${filter.minDownPay}`;
+        }
+
+        if (amount > filter.maximumLoan) {
+            actualError = `Sorry, maximum loan ${filter.maximumLoan}`;
         }
         if (actualError) {
             setError(actualError);
@@ -77,29 +86,20 @@ function Calculator() {
     };
 
     // Calculation
-    const calculateResults = ({ amount, interestRate, years }) => {
+    const calculateResults = ({ amount }) => {
         const userAmount = Number(amount);
-        const calculatedInterest = Number(interestRate) / 100 / 12;
-        const calculatedPayments = Number(years) * 12;
+        const calculatedInterest = Number(filter.interestRate) / 100 / 12;
+        const calculatedPayments = Number(filter.loanTerm) * 12;
 
         const x = Math.pow(1 + calculatedInterest, calculatedPayments);
         const monthly = (userAmount * x * calculatedInterest) / (x - 1);
 
         if (isFinite(monthly)) {
             const monthlyPaymentCalculated = monthly.toFixed(2);
-            const totalPaymentCalculated = (
-                monthly * calculatedPayments
-            ).toFixed(2);
-            const totalInterestCalculated = (
-                monthly * calculatedPayments -
-                userAmount
-            ).toFixed(2);
 
             // Set up results to the state to be displayed to the user
             setResults({
                 monthlyPayment: monthlyPaymentCalculated,
-                totalPayment: totalPaymentCalculated,
-                totalInterest: totalInterestCalculated,
                 isResult: true,
             });
         }
@@ -110,42 +110,39 @@ function Calculator() {
     const clearFields = () => {
         setUserValues({
             amount: '',
-            interestRate: '',
-            years: '',
             downPayment: '',
         });
 
         setResults({
             monthlyPayment: '',
-            totalPayment: '',
-            totalInterest: '',
             isResult: false,
         });
     };
 
     return (
-        <div className="calculator">
-            <div className="form">
-                <h1>Loan Calculator</h1>
+        <BoxCalc>
+            <div>
+                <Title>Loan Calculator</Title>
                 {/* Display the error when it exists */}
-                <p className="error">{error}</p>
+                <p>{error}</p>
                 <form onSubmit={handleSubmitValues}>
                     {/* ternary operator manages when the calculator and results will be displayed to the user */}
                     {!results.isResult ? (
                         //   Form to collect data from the user
-                        <div className="form-items">
+                        <div>
                             <div>
-                                <select>
+                                <Select onChange={handlerFilter}>
+                                    <option>---</option>
                                     {contacts.map(contact => (
                                         <option key={contact.id}>
                                             {contact.name}
                                         </option>
                                     ))}
-                                </select>
+                                </Select>
                             </div>
-                            <div>
-                                <label id="label">Amount:</label>
-                                <input
+                            <Loan>
+                                <AmountLabel id="label">Amount:</AmountLabel>
+                                <LoanInpur
                                     type="text"
                                     name="amount"
                                     placeholder="Loan amount"
@@ -153,74 +150,35 @@ function Calculator() {
                                     // onChange method sets the values given by the user as input to the userValues state
                                     onChange={handleInputChange}
                                 />
-                            </div>
-                            <div>
+                            </Loan>
+                            <Loan>
                                 <label id="label">Down payment:</label>
-                                <input
+                                <LoanInpur
                                     type="text"
                                     name="downPayment"
                                     placeholder="Down payment"
                                     value={userValues.downPayment}
                                     onChange={handleInputChange}
                                 />
-                            </div>
-                            <div>
-                                <label id="label">Interest Rate:</label>
-                                <input
-                                    type="text"
-                                    name="interestRate"
-                                    placeholder="interest Rate"
-                                    value={userValues.interest}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                            <div>
-                                <label id="label">Loans Tern:</label>
-                                <input
-                                    type="text"
-                                    name="years"
-                                    placeholder="Years to repay"
-                                    value={userValues.years}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                            <input type="submit" className="button" />
+                            </Loan>
+                            <InputBtn type="submit" />
                         </div>
                     ) : (
                         //   Form to display the results to the user
-                        <div className="form-items">
+                        <div>
                             <h4>
                                 Loan amount: ${userValues.amount} <br />{' '}
-                                Interest Rate: {userValues.interestRate}% <br />{' '}
-                                Years to repay: {userValues.years}
                             </h4>
-                            <div>
+                            <Loan>
                                 <label id="label">Monthly Payment:</label>
-                                <input
+                                <LoanInpur
                                     type="text"
                                     value={results.monthlyPayment}
                                     disabled
                                 />
-                            </div>
-                            <div>
-                                <label id="label">Total Payment: </label>
-                                <input
-                                    type="text"
-                                    value={results.totalPayment}
-                                    disabled
-                                />
-                            </div>
-                            <div>
-                                <label id="label">Total Interest:</label>
-                                <input
-                                    type="text"
-                                    value={results.totalInterest}
-                                    disabled
-                                />
-                            </div>
+                            </Loan>
                             {/* Button to clear fields */}
-                            <input
-                                className="button"
+                            <InputBtn
                                 value="Calculate again"
                                 type="button"
                                 onClick={clearFields}
@@ -229,8 +187,6 @@ function Calculator() {
                     )}
                 </form>
             </div>
-        </div>
+        </BoxCalc>
     );
 }
-
-export default Calculator;

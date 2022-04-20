@@ -1,26 +1,35 @@
 import './App.css';
-import ContactForm from './Components/ContactForm/ContactForm';
-import ContactList from './Components/ContactList/ContactList';
-import Filter from './Components/Filter/Filter';
-import { Title, Text } from './Components/Styled/Styled';
-import { useSelector } from 'react-redux';
-import { getContacts } from './Redux/selectors';
 import Calculator from './Components/Calculator/Calculator';
+import AppBar from './Components/AppBar';
+import { Route, Routes, Navigate } from 'react-router-dom';
+import { Suspense } from 'react';
+import { Skeleton } from '@mui/material';
+import BanksView from './Components/BanksView/BanksView';
 
 function App() {
-    const contacts = useSelector(getContacts);
     return (
-        <div className="App">
-            <Title>List of banks</Title>
-            <ContactForm />
-            <Filter />
-            {contacts.length ? (
-                <ContactList contacts={contacts} />
-            ) : (
-                <Text>Nothing</Text>
-            )}
-            <Calculator />
-        </div>
+        <>
+            <AppBar />
+            <Routes>
+                <Route
+                    path="/"
+                    element={
+                        <Suspense fallback={<Skeleton />}>
+                            <BanksView />
+                        </Suspense>
+                    }
+                />
+                <Route
+                    path="/calculator"
+                    element={
+                        <Suspense fallback={<Skeleton />}>
+                            <Calculator />
+                        </Suspense>
+                    }
+                />
+                <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+        </>
     );
 }
 
